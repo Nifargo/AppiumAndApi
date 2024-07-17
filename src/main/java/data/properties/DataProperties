@@ -1,0 +1,12 @@
+ipAddress = 127.0.0.1
+port = 4723
+AndroidDeviceName = autoTests
+platformNameAndroid = Android
+androidAutomationName = UiAutomator2
+androidAppLocation = android/androidReleaseBuild.apk";
+
+
+androidDeviceIos = iPhone XS Simulator
+iosAutomationName = XCUITest
+platformNameIOS = iOS
+platformVersionIos = 16.2
