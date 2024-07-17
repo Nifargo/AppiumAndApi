@@ -42,3 +42,5 @@ bin/
 .DS_Store.idea/
 /out/
 /build/
+src/test/resources/ios/iosReleaseBuild.ipa
+src/test/resources/android/androidReleaseBuild.apk
