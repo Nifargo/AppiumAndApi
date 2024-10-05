@@ -11,6 +11,10 @@ public class baseUrlYmlReader {
         return readYAMLFile("baseUrl", "BASE_URL_back");
     }
 
+    public static String baseUrlBffService() {
+        return readYAMLFile("baseUrl", "BASE_URL_BFFServices");
+    }
+
     public static String baseUrlFeedBack() {
         return readYAMLFile("baseUrl", "BASE_URL_feedback");
     }
@@ -49,6 +53,7 @@ public class baseUrlYmlReader {
         return readYAMLFile("baseUrl", "Appended_getUserTokenId");
     }
 
+    @SuppressWarnings("unused")
     public static String linkedToUser() {
         return readYAMLFile("baseUrl", "Appended_linkedWithUser");
     }
@@ -79,5 +84,9 @@ public class baseUrlYmlReader {
 
     public static String baseUrlSendingNotification(){
         return readYAMLFile("baseUrl", "BASE_URL_SendingNotification");
+    }
+
+    public static String baseUrlChargeStationInformation() {
+        return readYAMLFile("baseUrl", "Appended_bff_ChargePOIInfo");
     }
 }

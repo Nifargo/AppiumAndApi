@@ -2,6 +2,7 @@ package org.dkvProject.ui.guestFlow.profilePageProject;
 
 import common.gameChanger.ContextHandler;
 import common.gameChanger.ContextType;
+import common.listener.TestListener;
 import common.pageFinder.Finder;
 import helpers.baseHelpers.SkipOnBoardingTest;
 import org.dkv.app.navigationLine.NavigationBar;
@@ -9,12 +10,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static helpers.baseHelpers.DirectionForWebScrolling.DOWN;
 import static helpers.baseHelpers.DirectionForWebScrolling.UP;
+import static helpers.baseHelpers.HelpersMethod.pause;
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
 import static helpers.baseHelpers.HelpersMethod.scrollUsingJS;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class MyVehicleTest extends SkipOnBoardingTest {
 
@@ -93,6 +97,7 @@ public class MyVehicleTest extends SkipOnBoardingTest {
         vehicleModelPage.clickSaveButton();
 
         handler.changeContext(ContextType.NATIVE);
+        scrollDown(0.8, 0.1, 0.5, 2000);
 
         var routeCharging = myVehiclePage.clickRouteChargingArrow();
 
@@ -194,7 +199,9 @@ public class MyVehicleTest extends SkipOnBoardingTest {
         new Finder().WebPageFinder();
 
         routeCharging.clickFastCharging();
+        pause(100);
         routeCharging.clickUltraCharging();
+        pause(100);
         routeCharging.clickNormalCharging();
 
         Assertions.assertTrue(routeCharging.checkValidationWarningMsg(true));

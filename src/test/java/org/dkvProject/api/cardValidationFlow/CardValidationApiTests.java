@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import org.dkv.api.common.errorManager.StatusCode;
 import org.dkv.api.controller.cardValidation.CardValidationApi;
 import org.dkv.api.model.cardValidation.CardValidationPojo;
-import org.dkv.api.model.cardValidation.LocalizationKeyPojo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -54,6 +53,18 @@ public class CardValidationApiTests {
         forResponseAssertion(responseCardValidation).statusCodeIsEqualTo(StatusCode.BAD_REQUEST);
     }
 
+    @ParameterizedTest
+    @MethodSource("org.dkv.api.controller.cardValidation.cardValidData.CardValidDataGenerator#cardWithoutData")
+    @DisplayName("Check if user can validate card but without some parameters")
+    public void testDkvCardValidationWithoutParams(String cardNumber, String customerNumber, String cardValidTo) {
+
+        var cardValidationPojo = new CardValidationApi().getCardValidationDataPojo(cardNumber, customerNumber, cardValidTo);
+
+        Response responseCardValidation = CardValidationApi.cardValidationGet(cardValidationPojo);
+
+        forResponseAssertion(responseCardValidation).statusCodeIsEqualTo(StatusCode.SERVER_ERROR);
+    }
+
     @Test
     @DisplayName("Check if user can validate incorrect customer number")
     public void testDkvCardValidationCustomerNumberIncorrect() {
@@ -65,8 +76,6 @@ public class CardValidationApiTests {
 
         assertStatusCode(response.statusCode(), 404);
         CardValidationPojo cardValidationResponse = response.as(CardValidationPojo.class);
-        LocalizationKeyPojo localizationKey = cardValidationResponse.getLocalizationKey();
-        assertThat(localizationKey.getMessage(), equalTo("pricing_pro_card_scan_failure_text"));
-        assertThat(localizationKey.getTitle(), equalTo("pricing_pro_card_scan_failure_title"));
+        assertThat(cardValidationResponse.getError(), equalTo("Not Found"));
     }
 }

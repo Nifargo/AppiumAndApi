@@ -1,9 +1,9 @@
 package org.dkv.app.firstOpenJourney;
 
 import common.appiumElementsSettings.AppiumSelector;
-import io.appium.java_client.AppiumBy;
 
 import static common.appiumElementsSettings.AppiumActions.findByBy;
+import static common.locatorsSettings.AppConfiguration.androidJetPackLocator;
 import static org.openqa.selenium.By.xpath;
 
 public class OnboardingLinearLayout {
@@ -13,8 +13,8 @@ public class OnboardingLinearLayout {
     AppiumSelector truckButton = new AppiumSelector(xpath("//android.widget.TextView[@text = 'TRUCK']"), xpath("//XCUIElementTypeStaticText[@name='TRUCK']"));
     AppiumSelector refuellingButton = new AppiumSelector(xpath("//android.widget.TextView[@text = 'Refuelling']"), xpath("//XCUIElementTypeStaticText[@name='Refuelling']"));
     AppiumSelector chargeButton = new AppiumSelector(xpath("//android.widget.TextView[@text = 'Charge']"), xpath("//XCUIElementTypeStaticText[@name='Charge']"));
-    AppiumSelector vehicleTypeNextButton = new AppiumSelector(new AppiumBy.ByAndroidUIAutomator("new UiSelector().resourceId(\"vehicleTypeTopButton\")"), xpath("//XCUIElementTypeButton[@name='Next']"));
-    AppiumSelector vehicleTypeLaterButton = new AppiumSelector(new AppiumBy.ByAndroidUIAutomator("new UiSelector().resourceId(\"vehicleTypeBottomButton\")"), xpath("//XCUIElementTypeButton[@name='Later']"));
+    AppiumSelector vehicleTypeNextButton = new AppiumSelector(androidJetPackLocator("vehicleTypeTopButton"), xpath("//XCUIElementTypeButton[@name='Next']"));
+    AppiumSelector vehicleTypeLaterButton = new AppiumSelector(androidJetPackLocator("vehicleTypeBottomButton"), xpath("//XCUIElementTypeButton[@name='Later']"));
 
 
     public LocationPopUp clickLaterButton() {

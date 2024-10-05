@@ -1,44 +1,84 @@
 plugins {
-    id("io.freefair.lombok") version "8.3"
     id 'java'
+    id 'io.freefair.lombok' version '8.3'
 }
-ext.javaVersion = '17'
 
-group 'org.DKV'
-version '1.0-SNAPSHOT'
+ext {
+    javaVersion = '17'
+    junit5Ver = '5.9.2'
+    seleniumVer = '4.8.1'
+    log4jVer = '2.22.1'
+    restAssuredVer = '5.3.2'
+    commonsCodecVer = '1.15'
+    assertjVer = '3.21.0'
+    slf4jVer = '2.0.7'
+    logbackVer = '1.5.6'
+    appiumVer = '8.5.1'
+    selenideVer = '6.16.0'
+    jsonVer = '20231013'
+    jacksonVer = '2.15.2'
+    snakeyamlVer = '2.0'
+}
+
+group = 'org.DKV'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-ext {
-    junit5Ver = "5.9.2"
-}
-
 dependencies {
-    implementation(
-            'org.seleniumhq.selenium:selenium-java:4.8.0',
-            "org.junit.jupiter:junit-jupiter:$junit5Ver",
-            "org.junit.platform:junit-platform-suite:1.9.1",
-            'org.yaml:snakeyaml:2.0',
-            'org.apache.logging.log4j:log4j-core:2.22.1',
-            "io.rest-assured:rest-assured:5.3.2",
-            "commons-codec:commons-codec:1.15",
-            'org.assertj:assertj-core:3.21.0'
-    )
-
-    implementation group: 'io.appium', name: 'java-client', version: '8.5.1'
-    implementation group: 'com.codeborne', name: 'selenide', version: '6.16.0'
-    implementation group: 'org.json', name: 'json', version: '20231013'
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
+    implementation "org.seleniumhq.selenium:selenium-java:$seleniumVer"
+    implementation "org.junit.jupiter:junit-jupiter:$junit5Ver"
+    implementation "org.junit.platform:junit-platform-suite:1.9.1"
+    implementation "org.yaml:snakeyaml:$snakeyamlVer"
+    implementation "org.apache.logging.log4j:log4j-core:$log4jVer"
+    implementation "io.rest-assured:rest-assured:$restAssuredVer"
+    implementation "commons-codec:commons-codec:$commonsCodecVer"
+    implementation "org.assertj:assertj-core:$assertjVer"
+    implementation "org.slf4j:slf4j-api:$slf4jVer"
+    implementation "ch.qos.logback:logback-classic:$logbackVer"
+    implementation "io.appium:java-client:$appiumVer"
+    implementation "com.codeborne:selenide:$selenideVer"
+    implementation "org.json:json:$jsonVer"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVer"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5Ver"
-    testImplementation 'io.rest-assured:json-path:5.3.2'
-
+    testImplementation "io.rest-assured:json-path:$restAssuredVer"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5Ver"
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeTags 'api', 'ui'
+    }
+    systemProperty 'isSauceLab', project.hasProperty('isSauceLab') ? project.property('isSauceLab') : 'false'
+    systemProperty 'isIOS', project.hasProperty('isIOS') ? project.property('isIOS') : 'false'
+}
+
+tasks.register('apiTest', Test) {
+    useJUnitPlatform {
+        includeTags 'api'
+        excludeTags 'ui', 'disabled'
+        exclude '**/*Suite.class'
+    }
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+tasks.register('uiTest', Test) {
+    useJUnitPlatform {
+        includeTags 'ui'
+        excludeTags 'api', 'disabled'
+        exclude '**/*Suite.class'
+    }
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    systemProperty 'isSauceLab', project.hasProperty('isSauceLab') ? project.property('isSauceLab') : 'false'
+    systemProperty 'isIOS', project.hasProperty('isIOS') ? project.property('isIOS') : 'false'
+
+    doFirst {
+        logger.lifecycle("Running uiTest with isSauceLab=${project.hasProperty('isSauceLab') ? project.property('isSauceLab') : 'false'}")
+        logger.lifecycle("Running uiTest with isIOS=${project.hasProperty('isIOS') ? project.property('isIOS') : 'false'}")
+    }
 }

@@ -17,4 +17,8 @@ public class MapPage {
         findByBy(listButton).click();
     }
 
+    public boolean searchFieldIsDisplayed() {
+        return findByBy(searchField).isDisplayed();
+    }
+
 }

@@ -5,17 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openqa.selenium.WebElement;
 
+import static common.appiumElementsSettings.AppiumInit.getAppiumDriver;
+
 @AllArgsConstructor
 @Getter
 public class ElementActions {
 
     private WebElement element;
 
+    @SuppressWarnings("unused")
     public ElementActions shouldHas(Condition condition) {
         condition.check(this);
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ElementActions shouldBe(Condition condition) {
         condition.check(this);
         return this;
@@ -51,11 +55,17 @@ public class ElementActions {
         return element.getAttribute("checked").equals("true");
     }
 
+    public boolean isWebChecked() {
+        return element.isSelected();
+    }
+
     public boolean isNotClickable() {
         return element.getAttribute("clickable").equals("false");
     }
 
-    public boolean isElementAbsent() {
-        return !element.isDisplayed();
+    public static void navigateBackMultipleTimes(int times) {
+        for (int i = 0; i < times; i++) {
+            getAppiumDriver().navigate().back();
+        }
     }
 }

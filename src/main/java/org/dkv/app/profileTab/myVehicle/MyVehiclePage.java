@@ -1,49 +1,48 @@
 package org.dkv.app.profileTab.myVehicle;
 
 import common.appiumElementsSettings.AppiumSelector;
-import io.appium.java_client.AppiumBy.ByAndroidUIAutomator;
 import org.openqa.selenium.By;
 
 import static common.appiumElementsSettings.AppiumActions.findByBy;
-import static common.locatorsSettings.AppConfiguration.resourceId;
+import static common.locatorsSettings.AppConfiguration.androidJetPackLocator;
 
 public class MyVehiclePage {
 
-    AppiumSelector myVehicleTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTitle")), By.id("ios"));
-    AppiumSelector myVehicleBackBtn = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleBackBtn")), By.id("ios"));
-    AppiumSelector notSpecifiedRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtn0")), By.id("ios"));
-    AppiumSelector notSpecifiedTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnTitle0")), By.id("ios"));
-    AppiumSelector notSpecifiedDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnDescription0")), By.id("ios"));
-    AppiumSelector carRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtn1")), By.id("ios"));
-    AppiumSelector carTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnTitle1")), By.id("ios"));
-    AppiumSelector carDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnDescription1")), By.id("ios"));
-    AppiumSelector truckSmallRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtn2")), By.id("ios"));
-    AppiumSelector truckSmallTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnTitle2")), By.id("ios"));
-    AppiumSelector truckSmallDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnDescription2")), By.id("ios"));
-    AppiumSelector truckRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtn3")), By.id("ios"));
-    AppiumSelector truckTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnTitle3")), By.id("ios"));
-    AppiumSelector truckDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleTypeRadioBtnDescription3")), By.id("ios"));
-    AppiumSelector noInformationRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtn0")), By.id("ios"));
-    AppiumSelector noInformationTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnTitle0")), By.id("ios"));
-    AppiumSelector noInformationDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnDescription0")), By.id("ios"));
-    AppiumSelector combustionEngineRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtn1")), By.id("ios"));
-    AppiumSelector combustionEngineTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnTitle1")), By.id("ios"));
-    AppiumSelector combustionEngineDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnDescription1")), By.id("ios"));
-    AppiumSelector preferredFuelType = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1Title0")), By.id("ios"));
-    AppiumSelector preferredFuelValue = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1Value0")), By.id("ios"));
-    AppiumSelector preferredFuelArrow = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1DropDown0")), By.id("ios"));
-    AppiumSelector priceDisplay = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1Title1")), By.id("ios"));
-    AppiumSelector priceDisplayValue = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1Value1")), By.id("ios"));
-    AppiumSelector priceDisplayArrow = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector1DropDown1")), By.id("ios"));
-    AppiumSelector electricRadioButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtn2")), By.id("ios"));
-    AppiumSelector electricTitle = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnTitle2")), By.id("ios"));
-    AppiumSelector electricDescription = new AppiumSelector(new ByAndroidUIAutomator(resourceId("driveTypeRadioBtnDescription2")), By.id("ios"));
-    AppiumSelector vehicleModel = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector2Title0")), By.id("ios"));
-    AppiumSelector vehicleModelValue = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector2Value0")), By.id("ios"));
-    AppiumSelector vehicleModelArrow = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector2DropDown0")), By.id("ios"));
-    AppiumSelector routeCharging = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector2Title1")), By.id("ios"));
-    AppiumSelector routeChargingArrow = new AppiumSelector(new ByAndroidUIAutomator(resourceId("propertySelector2DropDown1")), By.id("ios"));
-    AppiumSelector backButton = new AppiumSelector(new ByAndroidUIAutomator(resourceId("myVehicleBackBtn")), By.id("ios"));
+    AppiumSelector myVehicleTitle = new AppiumSelector(androidJetPackLocator("myVehicleTitle"), By.id("ios"));
+    AppiumSelector myVehicleBackBtn = new AppiumSelector(androidJetPackLocator("myVehicleBackBtn"), By.id("ios"));
+    AppiumSelector notSpecifiedRadioButton = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtn0"), By.id("ios"));
+    AppiumSelector notSpecifiedTitle = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnTitle0"), By.id("ios"));
+    AppiumSelector notSpecifiedDescription = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnDescription0"), By.id("ios"));
+    AppiumSelector carRadioButton = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtn1"), By.id("ios"));
+    AppiumSelector carTitle = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnTitle1"), By.id("ios"));
+    AppiumSelector carDescription = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnDescription1"), By.id("ios"));
+    AppiumSelector truckSmallRadioButton = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtn2"), By.id("ios"));
+    AppiumSelector truckSmallTitle = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnTitle2"), By.id("ios"));
+    AppiumSelector truckSmallDescription = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnDescription2"), By.id("ios"));
+    AppiumSelector truckRadioButton = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtn3"), By.id("ios"));
+    AppiumSelector truckTitle = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnTitle3"), By.id("ios"));
+    AppiumSelector truckDescription = new AppiumSelector(androidJetPackLocator("myVehicleTypeRadioBtnDescription3"), By.id("ios"));
+    AppiumSelector noInformationRadioButton = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtn0"), By.id("ios"));
+    AppiumSelector noInformationTitle = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnTitle0"), By.id("ios"));
+    AppiumSelector noInformationDescription = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnDescription0"), By.id("ios"));
+    AppiumSelector combustionEngineRadioButton = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtn1"), By.id("ios"));
+    AppiumSelector combustionEngineTitle = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnTitle1"), By.id("ios"));
+    AppiumSelector combustionEngineDescription = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnDescription1"), By.id("ios"));
+    AppiumSelector preferredFuelType = new AppiumSelector(androidJetPackLocator("propertySelector1Title0"), By.id("ios"));
+    AppiumSelector preferredFuelValue = new AppiumSelector(androidJetPackLocator("propertySelector1Value0"), By.id("ios"));
+    AppiumSelector preferredFuelArrow = new AppiumSelector(androidJetPackLocator("propertySelector1DropDown0"), By.id("ios"));
+    AppiumSelector priceDisplay = new AppiumSelector(androidJetPackLocator("propertySelector1Title1"), By.id("ios"));
+    AppiumSelector priceDisplayValue = new AppiumSelector(androidJetPackLocator("propertySelector1Value1"), By.id("ios"));
+    AppiumSelector priceDisplayArrow = new AppiumSelector(androidJetPackLocator("propertySelector1DropDown1"), By.id("ios"));
+    AppiumSelector electricRadioButton = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtn2"), By.id("ios"));
+    AppiumSelector electricTitle = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnTitle2"), By.id("ios"));
+    AppiumSelector electricDescription = new AppiumSelector(androidJetPackLocator("driveTypeRadioBtnDescription2"), By.id("ios"));
+    AppiumSelector vehicleModel = new AppiumSelector(androidJetPackLocator("propertySelector2Title0"), By.id("ios"));
+    AppiumSelector vehicleModelValue = new AppiumSelector(androidJetPackLocator("propertySelector2Value0"), By.id("ios"));
+    AppiumSelector vehicleModelArrow = new AppiumSelector(androidJetPackLocator("propertySelector2DropDown0"), By.id("ios"));
+    AppiumSelector routeCharging = new AppiumSelector(androidJetPackLocator("propertySelector2Title1"), By.id("ios"));
+    AppiumSelector routeChargingArrow = new AppiumSelector(androidJetPackLocator("propertySelector2DropDown1"), By.id("ios"));
+    AppiumSelector backButton = new AppiumSelector(androidJetPackLocator("myVehicleBackBtn"), By.id("ios"));
 
     public void clickBackButton() {
         findByBy(backButton).click();

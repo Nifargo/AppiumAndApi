@@ -2,6 +2,7 @@ package org.dkvProject.ui.guestFlow.profilePageProject;
 
 import common.gameChanger.ContextHandler;
 import common.gameChanger.ContextType;
+import common.listener.TestListener;
 import common.pageFinder.Finder;
 import helpers.baseHelpers.SkipOnBoardingTest;
 import org.dkv.app.navigationLine.NavigationBar;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,7 @@ import static helpers.baseHelpers.HelpersMethod.navigateBackMultipleTimes;
 import static helpers.baseHelpers.HelpersMethod.pause;
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class ProfilePageTest extends SkipOnBoardingTest {
 
@@ -29,7 +32,7 @@ public class ProfilePageTest extends SkipOnBoardingTest {
         var myFavouritesPage = profilePage.clickFavouriteButton();
         Assertions.assertTrue(myFavouritesPage.isEmptyFavouritesPage());
         navigateBackMultipleTimes(1);
-        Assertions.assertTrue(new NavigationBar().isProfileButtonIsSelected());
+        Assertions.assertTrue(new NavigationBar().visibilityOfNavigationBar());
     }
 
     @Test
@@ -40,7 +43,7 @@ public class ProfilePageTest extends SkipOnBoardingTest {
         var myDkvCardsPage = profilePage.clickMyDkvCardsButton();
         Assertions.assertTrue(myDkvCardsPage.emptyMyDkvCardsPage());
         navigateBackMultipleTimes(1);
-        Assertions.assertTrue(new NavigationBar().isProfileButtonIsSelected());
+        Assertions.assertTrue(new NavigationBar().visibilityOfNavigationBar());
     }
 
     @Test
@@ -51,7 +54,7 @@ public class ProfilePageTest extends SkipOnBoardingTest {
         var transactionsPage = profilePage.clickTransactionsButton();
         Assertions.assertTrue(transactionsPage.isEmptyTransactionsPage());
         navigateBackMultipleTimes(1);
-        Assertions.assertTrue(new NavigationBar().isProfileButtonIsSelected());
+        Assertions.assertTrue(new NavigationBar().visibilityOfNavigationBar());
     }
 
     @Test
@@ -60,9 +63,8 @@ public class ProfilePageTest extends SkipOnBoardingTest {
         String expectedFeedbackTitle = "Feedback";
         List<String> emails = Arrays.asList("@example.com", "user@", "user@.com.my", "user@example.com (Joe Smith", "user@example..com");
 
-
         var profilePage = new NavigationBar().clickProfileButton();
-        pause(100);
+        pause(500);
         scrollDown(0.8, 0.1, 0.5, 2000);
         var feedbackProfilePage = profilePage.clickFeedbackButton();
         Assertions.assertEquals(feedbackProfilePage.getFeedbackTittle(), expectedFeedbackTitle);
@@ -78,17 +80,20 @@ public class ProfilePageTest extends SkipOnBoardingTest {
 
         for (String email : emails) {
             feedbackProfilePage.clickEmailField(email);
+            pause(100);
             feedbackProfilePage.typeInTextField("test");
+            pause(100);
             Assertions.assertTrue(feedbackProfilePage.errorMessagesVisible());
         }
         feedbackProfilePage.clickEmailField("dkv@gmail.com");
 
-        feedbackProfilePage.clickSubmitButton();
+        var successFeedback = feedbackProfilePage.clickSubmitButton();
+        successFeedback.clickCloseButton();
 
         handler.changeContext(ContextType.NATIVE);
 
         navigateBackMultipleTimes(1);
-        Assertions.assertTrue(new NavigationBar().isProfileButtonIsSelected());
+        Assertions.assertTrue(new NavigationBar().visibilityOfNavigationBar());
     }
 
     @Test
@@ -113,7 +118,7 @@ public class ProfilePageTest extends SkipOnBoardingTest {
     }
 
     @Test
-    @DisplayName("DAF-T12 Check feedback page and forgot pass link")
+    @DisplayName("DAF-T14 Check feedback page and forgot pass link")
     public void ProfileAppFeedbackPageAndForgotPass() {
 
         var profilePage = new NavigationBar().clickProfileButton();
@@ -126,6 +131,10 @@ public class ProfilePageTest extends SkipOnBoardingTest {
         new Finder().WebPageFinder();
 
         feedbackProfilePage.clickCantLoginDrop();
-
+        Assertions.assertTrue(feedbackProfilePage.cantLoginMsgVisible());
+        Assertions.assertTrue(feedbackProfilePage.noCardInAppMsgVisible());
+        Assertions.assertTrue(feedbackProfilePage.anyTransactionsMsgVisible());
+        handler.changeContext(ContextType.NATIVE);
+        navigateBackMultipleTimes(1);
     }
 }

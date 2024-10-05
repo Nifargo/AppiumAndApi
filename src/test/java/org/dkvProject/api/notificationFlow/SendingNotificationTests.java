@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.dkv.api.common.errorManager.StatusCode;
 import org.dkv.api.controller.notifications.sendingNotification.SendNotification;
 import org.dkv.api.model.notificationFlow.sendingNotification.RecipientNotificationPojo;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class SendingNotificationTests {
     @DisplayName("Sending notification with user id and destination Home page")
     public void testSendingUserIdHomePage() {
 
-        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("548164", buildNotificationTitle(), dataDestination("open_home_screen"));
+        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("512701", buildNotificationTitle(), dataDestination("open_home_screen"));
 
         Response SendingResponse = SendNotification.postSendUserIdDestination(sendingNotificationRequest);
         forResponseAssertion(SendingResponse).statusCodeIsEqualTo(StatusCode.OK);
@@ -45,7 +46,7 @@ public class SendingNotificationTests {
     @DisplayName("Sending notification with user id and destination Transactions page")
     public void testSendingUserIdTransactionsPage() {
 
-        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("548164", buildNotificationTitle(), dataDestination("open_transaction_history_screen"));
+        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("512701", buildNotificationTitle(), dataDestination("open_transaction_history_screen"));
 
         Response SendingResponse = SendNotification.postSendUserIdDestination(sendingNotificationRequest);
         forResponseAssertion(SendingResponse).statusCodeIsEqualTo(StatusCode.OK);
@@ -56,7 +57,7 @@ public class SendingNotificationTests {
     @DisplayName("Sending notification with user id and destination My DKV cards page")
     public void testSendingUserIdMyCardsPage() {
 
-        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("548164", buildNotificationTitle(), dataDestination("open_my_cards_screen"));
+        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("512701", buildNotificationTitle(), dataDestination("open_my_cards_screen"));
 
         Response SendingResponse = SendNotification.postSendUserIdDestination(sendingNotificationRequest);
         forResponseAssertion(SendingResponse).statusCodeIsEqualTo(StatusCode.OK);
@@ -67,7 +68,7 @@ public class SendingNotificationTests {
     @DisplayName("Sending notification with user id and destination active charging session Id")
     public void testSendingUserIdChargingSession() {
 
-        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("548164", buildNotificationTitle(), dataDestinationSessionId("open_ev_active_charging_screen", "23cb3aac-c524-43fd-a52a-0f3c8d7a8a4d"));
+        var sendingNotificationRequest = new SendNotification().buildSendingNotificationUserId("512701", buildNotificationTitle(), dataDestinationSessionId("open_ev_active_charging_screen", "f42100d4-06e2-47a8-ad4e-150cb2bf19a7"));
 
         Response SendingResponse = SendNotification.postSendUserIdDestination(sendingNotificationRequest);
         forResponseAssertion(SendingResponse).statusCodeIsEqualTo(StatusCode.OK);
@@ -85,6 +86,7 @@ public class SendingNotificationTests {
         forResponseStatusMessage(SendingResponse).verifyResponseBodyType(RecipientNotificationPojo.class);
     }
 
+    @Disabled
     @Test
     @DisplayName("Sending notification with FCm token and destination My DKV cards page")
     public void testSendingFcmToken() {

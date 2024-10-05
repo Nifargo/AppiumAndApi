@@ -1,10 +1,12 @@
 package org.dkv.app.settingsTab;
 
 import common.appiumElementsSettings.AppiumSelector;
+import common.systemLogger.AppLogger;
 import io.appium.java_client.AppiumBy.ByAccessibilityId;
 import org.dkv.app.firstOpenJourney.OnboardingPage;
 import org.dkv.app.header.AdditionalHeaders;
 import org.dkv.app.settingsTab.pricesCurrency.PricesCurrencyPage;
+import org.slf4j.Logger;
 
 import static common.appiumElementsSettings.AppiumActions.findByBy;
 import static common.locatorsSettings.AppConfiguration.PACKAGE_FLAVOR;
@@ -12,8 +14,10 @@ import static org.openqa.selenium.By.id;
 import static org.openqa.selenium.By.xpath;
 
 public class SettingsPage {
+    private static final Logger logger = AppLogger.getLogger(SettingsPage.class);
+
     AppiumSelector pricesCurrencyButton = new AppiumSelector(id(PACKAGE_FLAVOR + ":id/pricesAndCurrency"), new ByAccessibilityId("Prices & currency (fuelling)"));
-    AppiumSelector notificationSettingsButton = new AppiumSelector(id(PACKAGE_FLAVOR + "id/notificationsSettings"), new ByAccessibilityId("Notification settings"));
+    AppiumSelector notificationSettingsButton = new AppiumSelector(id(PACKAGE_FLAVOR + ":id/notificationsSettings"), new ByAccessibilityId("Notification settings"));
     AppiumSelector allowTrackingButton = new AppiumSelector(id(PACKAGE_FLAVOR + ":id/trackingSwitch"), id("ios"));
     AppiumSelector systemRadioButton = new AppiumSelector(id(PACKAGE_FLAVOR + ":id/system"), xpath("//XCUIElementTypeStaticText[@name='System']"));
     AppiumSelector lightRadioButton = new AppiumSelector(id(PACKAGE_FLAVOR + ":id/light"), xpath("//XCUIElementTypeStaticText[@name='Light']"));
@@ -81,10 +85,6 @@ public class SettingsPage {
         return findByBy(appSettings).getText();
     }
 
-    public void clickAllowTracking() {
-        findByBy(allowTrackingButton).click();
-    }
-
     public boolean allowTrackingIsChecked() {
         return findByBy(allowTrackingButton).isChecked();
     }
@@ -97,13 +97,24 @@ public class SettingsPage {
         return findByBy(notificationSettingsButton).isDisplayed();
     }
 
-    public NotificationSettings clickNotificationSettingsButton() {
-        findByBy(notificationSettingsButton).click();
-        return new NotificationSettings();
-    }
-
     public AdditionalHeaders clickDataProtectMenuButton() {
         findByBy(dataProtectionMenuButton).click();
         return new AdditionalHeaders();
+    }
+
+    public NotificationSettings clickNotificationSettingsButton(int maxRetries) {
+        int attempts = 0;
+        while (attempts < maxRetries) {
+            try {
+                findByBy(notificationSettingsButton).click();
+                if (new NotificationSettings().notificationSettingsTitleIsDisplayed()) {
+                    return new NotificationSettings();
+                }
+            } catch (Exception e) {
+                logger.error("Failed to click the Notification Settings button. Retrying..." + e.getMessage());
+            }
+            attempts++;
+        }
+        throw new RuntimeException("Failed to click the Notification Settings button after " + maxRetries + " attempts");
     }
 }

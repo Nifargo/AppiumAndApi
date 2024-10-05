@@ -70,7 +70,11 @@ public class ProfilePage {
     }
 
     public boolean existLogOutButton() {
-        return findByBy(logOutButton).isDisplayed();
+        try {
+            return findByBy(logOutButton).isDisplayed();
+        } catch (NoSuchElementException | TimeoutException e) {
+            return false;
+        }
     }
 
     public String getGuestUserTitleText() {
@@ -96,6 +100,10 @@ public class ProfilePage {
     }
 
     public boolean existLoginButton() {
-        return findByBy(loginButton).isDisplayed();
+        try {
+            return findByBy(loginButton).isDisplayed();
+        } catch (NoSuchElementException | TimeoutException e) {
+            return false;
+        }
     }
 }

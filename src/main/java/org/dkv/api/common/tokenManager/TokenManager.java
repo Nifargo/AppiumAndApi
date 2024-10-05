@@ -1,20 +1,24 @@
 package org.dkv.api.common.tokenManager;
 
+import common.systemLogger.AppLogger;
 import io.restassured.response.Response;
 import org.dkv.api.common.applicationBaseRestResource.RestResource;
+import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.util.HashMap;
 
-import static common.systemLogger.AppLogger.logger;
 import static org.dkv.api.common.tokenManager.TokenYmlReader.secret;
 import static org.dkv.api.common.tokenManager.TokenYmlReader.token;
 
 public class TokenManager {
 
+    private static final Logger logger = AppLogger.getLogger(TokenManager.class);
+
     private static Instant expiry_time;
 
     public static String getToken() {
+
         String accessToken = null;
         try {
             if (accessToken == null || Instant.now().isAfter(expiry_time)) {
@@ -26,7 +30,7 @@ public class TokenManager {
                 throw new RuntimeException("Token is good to use");
             }
         } catch (Exception e) {
-            logger.error("Error is here" + e);
+            logger.error("Error is here {}", e.getMessage());
             throw new RuntimeException("ABORT! Failed to get a token");
         }
         return accessToken;
@@ -58,7 +62,7 @@ public class TokenManager {
                 throw new RuntimeException("Token is good to use");
             }
         } catch (Exception e) {
-            logger.error("Error is here" + e);
+            logger.error("Error is here{}", e.getMessage());
             throw new RuntimeException("ABORT! Failed to get a Notification token");
         }
         return access_token;

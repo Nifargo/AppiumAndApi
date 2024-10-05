@@ -2,6 +2,7 @@ package org.dkvProject.ui.loginFlow.profilePageProject;
 
 import common.gameChanger.ContextHandler;
 import common.gameChanger.ContextType;
+import common.listener.TestListener;
 import common.pageFinder.Finder;
 import helpers.baseHelpers.SkipLoginFlowTest;
 import org.dkv.app.navigationLine.NavigationBar;
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static helpers.baseHelpers.DirectionForWebScrolling.DOWN;
 import static helpers.baseHelpers.DirectionForWebScrolling.UP;
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
 import static helpers.baseHelpers.HelpersMethod.scrollUsingJS;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class LoginProfilePageTest extends SkipLoginFlowTest {
 

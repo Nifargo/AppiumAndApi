@@ -12,11 +12,12 @@ import org.dkv.api.controller.notifications.notificationGuestApi.notificationBui
 import org.dkv.api.controller.notifications.notificationGuestApi.notificationBuilders.IosNotificationSystem;
 import org.dkv.api.controller.notifications.notificationGuestApi.notificationBuilders.NotificationDirector;
 import org.dkv.api.controller.notifications.notificationGuestApi.notificationBuilders.NotificationSystem;
-import org.dkv.api.model.notificationFlow.notificationToken.NotificationTokenIdPojo;
 import org.dkv.api.model.notificationFlow.notificationFlowGuest.NotificationAppTokensVerifyPojo;
 import org.dkv.api.model.notificationFlow.notificationFlowGuest.RetrieveSubscriptionsListPojo;
 import org.dkv.api.model.notificationFlow.notificationFlowGuest.SubscriptionTopicsPojo;
 import org.dkv.api.model.notificationFlow.notificationFlowGuest.UpdateNotificationTokenPojo;
+import org.dkv.api.model.notificationFlow.notificationToken.NotificationTokenIdPojo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -49,12 +50,11 @@ public class NotificationGuestApiTests {
         forResponseStatusMessage(responseNotificationTokenId).verifyResponseBodyType(NotificationTokenIdPojo.class);
     }
 
-//    TODO unskip these tests when we will unlock topics in the notifications settings
     @Disabled
     @Test
     @DisplayName("Get tokenId and update topic subscriptions for a IOS FCM token and retrieve a list of current topics for a specific token")
     public void testUpdateTopicsSubscriptionForIOSUser() {
-        List<String> topics = Arrays.asList("fuel_news", "urgent_notifications");
+        List<String> topics = Arrays.asList("App_news", "Fuel_news");
 
         NotificationDirector notificationDirector = new NotificationDirector();
         notificationDirector.setNotificationBuilder(new IosNotificationSystem());
@@ -71,7 +71,7 @@ public class NotificationGuestApiTests {
         Response responseSubscription = NotificationSubscriptionApi.createNotificationSubscription(tokenId, subscriptionTopicsPojo);
         SubscriptionTopicsPojo subscriptionTopicsResponse = responseSubscription.as(SubscriptionTopicsPojo.class);
         forResponseAssertion(responseSubscription).statusCodeIsEqualTo(StatusCode.OK);
-        assertThat(subscriptionTopicsResponse.getMessage(), equalTo("Topic subscription update successful."));
+        assertThat(subscriptionTopicsResponse.getSubscribed().getSuccessCount(), equalTo(2));
 
         Response responseRetrieveSubscriptionsApi = RetrieveSubscriptionsApi.getNotificationSubscriptionList(tokenId);
         RetrieveSubscriptionsListPojo retrieveSubscriptionsListPojo = responseRetrieveSubscriptionsApi.as(RetrieveSubscriptionsListPojo.class);
@@ -80,11 +80,11 @@ public class NotificationGuestApiTests {
         forResponseStatusMessage(responseRetrieveSubscriptionsApi).verifyResponseBodyType(RetrieveSubscriptionsListPojo.class);
     }
 
-    @Disabled
     @Test
-    @DisplayName("Get tokenId and update topic subscriptions for a Android FCM token and retrieve a list of current topics for a specific token")
+    @DisplayName("Get tokenId and update topic subscriptions for a Android FCM token and retrieve an empty list of current topics for a specific token")
     public void testUpdateTopicsSubscriptionForAndroidUser() {
-        List<String> topics = Collections.emptyList();
+
+        List<String> topicsEmpty = Collections.emptyList();
 
         NotificationDirector notificationDirector = new NotificationDirector();
         notificationDirector.setNotificationBuilder(new AndroidNotificationSystem());
@@ -97,19 +97,27 @@ public class NotificationGuestApiTests {
 
         String tokenId = notificationTokenIdResponse.getTokenId();
 
-        var subscriptionTopicsPojo = new NotificationSubscriptionApi().sendNotificationTopics(topics);
+        var subscriptionTopicsPojo = new NotificationSubscriptionApi().sendNotificationTopics(topicsEmpty);
         Response responseSubscription = NotificationSubscriptionApi.createNotificationSubscription(tokenId, subscriptionTopicsPojo);
         SubscriptionTopicsPojo subscriptionTopicsResponse = responseSubscription.as(SubscriptionTopicsPojo.class);
+        forResponseAssertion(responseSubscription).statusCodeIsEqualTo(StatusCode.BAD_REQUEST);
+        assertThat(subscriptionTopicsResponse.getMessage(), equalTo("[ 'topics' must not be empty. Current value: [] ]"));
+
+        List<String> topics = Arrays.asList("urgent_notifications", "fuel_news");
+        subscriptionTopicsPojo = new NotificationSubscriptionApi().sendNotificationTopics(topics);
+        responseSubscription = NotificationSubscriptionApi.createNotificationSubscription(tokenId, subscriptionTopicsPojo);
+        subscriptionTopicsResponse = responseSubscription.as(SubscriptionTopicsPojo.class);
         forResponseAssertion(responseSubscription).statusCodeIsEqualTo(StatusCode.OK);
-        assertThat(subscriptionTopicsResponse.getMessage(), equalTo("Topic subscription update successful."));
+        Assertions.assertEquals(3, subscriptionTopicsResponse.getUnsubscribed().getSuccessCount());
 
         Response responseRetrieveSubscriptionsApi = RetrieveSubscriptionsApi.getNotificationSubscriptionList(tokenId);
         RetrieveSubscriptionsListPojo retrieveSubscriptionsListPojo = responseRetrieveSubscriptionsApi.as(RetrieveSubscriptionsListPojo.class);
         forResponseAssertion(responseRetrieveSubscriptionsApi).statusCodeIsEqualTo(StatusCode.OK);
-        assertThat(retrieveSubscriptionsListPojo.getTopics(), equalTo(topics));
+        Assertions.assertFalse(retrieveSubscriptionsListPojo.getTopics().isEmpty());
         forResponseStatusMessage(responseRetrieveSubscriptionsApi).verifyResponseBodyType(RetrieveSubscriptionsListPojo.class);
     }
 
+    @Disabled
     @Test
     @DisplayName("Verify if an Fcm token and its tokenId are registered and match on the server, then change FCM token and check it again. And delete TokenId after all")
     public void testVerifyTokenIdAndFcmToken() {

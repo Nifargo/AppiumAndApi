@@ -14,7 +14,7 @@ public class SpecBuilderPage {
 
     public static RequestSpecification getRequestSpec(){
         return new RequestSpecBuilder().
-                setBaseUri(baseUrlBack()).
+                setBaseUri(baseUrl() + baseUrlBack()).
                 setContentType(ContentType.JSON).
                 log(LogDetail.ALL).
                 build();

@@ -17,7 +17,10 @@ public enum WebTypeElements {
     APPCHECKBOX("app-checkbox"),
     APPVALIDATION("app-validation-warning"),
     APPRANGESLIDER("app-range-slider"),
-    APPTIMESLIDER("app-time-slider");
+    APPTIMESLIDER("app-time-slider"),
+    DKVTOGGLE("dkv-toggle"),
+    DKVCHECKBOX("dkv-checkbox"),
+    DKVBUTTON("dkv-button");
 
     public final String type;
 }

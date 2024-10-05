@@ -1,18 +1,18 @@
 package org.dkv.app.firstOpenJourney;
 
 import common.appiumElementsSettings.AppiumSelector;
-import io.appium.java_client.AppiumBy;
 
 import static common.appiumElementsSettings.AppiumActions.findByBy;
+import static common.locatorsSettings.AppConfiguration.androidJetPackLocator;
 import static org.openqa.selenium.By.xpath;
 
 public class OnboardingPage {
 
-    AppiumSelector onBoardingBottomButton = new AppiumSelector(new AppiumBy.ByAndroidUIAutomator("new UiSelector().resourceId(\"onBoardingBottomButton\")"), xpath("/XCUIElementTypeButton[@name='Skip']"));
-    AppiumSelector onBoardingTopButton = new AppiumSelector(new AppiumBy.ByAndroidUIAutomator("new UiSelector().resourceId(\"onBoardingTopButton\")"), xpath("//XCUIElementTypeButton[@name='Next']"));
+    AppiumSelector onBoardingBottomButton = new AppiumSelector(androidJetPackLocator("onBoardingBottomButton"), xpath("/XCUIElementTypeButton[@name='Skip']"));
+    AppiumSelector onBoardingTopButton = new AppiumSelector(androidJetPackLocator("onBoardingTopButton"), xpath("//XCUIElementTypeButton[@name='Next']"));
 
     public OnboardingLinearLayout clickSkipButton() {
-            findByBy(onBoardingBottomButton).click();
+        findByBy(onBoardingBottomButton).click();
         return new OnboardingLinearLayout();
     }
 

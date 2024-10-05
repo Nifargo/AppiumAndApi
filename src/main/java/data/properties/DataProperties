@@ -4,9 +4,20 @@ AndroidDeviceName = autoTests
 platformNameAndroid = Android
 androidAutomationName = UiAutomator2
 androidAppLocation = android/androidReleaseBuild.apk";
+platformVersionIos = 12
+deviceOrientation = PORTRAIT
 
 
 androidDeviceIos = iPhone XS Simulator
 iosAutomationName = XCUITest
 platformNameIOS = iOS
 platformVersionIos = 16.2
+
+sauceUsername = Nifargo
+AndroidDeviceNameSauce = Android GoogleAPI Emulator
+sauceAccessKey = 695aec88-a6cf-4f42-a1b6-6de39e1e0279
+sauceBuildAndroid = appium-build-GQYPW
+sauceBuildIOS = appium-build-WYA96
+sauceTestNameAndroid = <AndroidTestsOnSourceLab>
+sauceTestNameIOS = <IOS regression tests>
+sauceUrl = https://Nifargo:695aec88-a6cf-4f42-a1b6-6de39e1e0279@ondemand.eu-central-1.saucelabs.com:443/wd/hub

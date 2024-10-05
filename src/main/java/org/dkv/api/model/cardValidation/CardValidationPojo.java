@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Builder
@@ -34,4 +35,6 @@ public class CardValidationPojo {
     private String error;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("networks")
+    private List<String> networks;
 }

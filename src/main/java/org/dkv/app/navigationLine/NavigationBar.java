@@ -42,7 +42,7 @@ public class NavigationBar {
         return new SettingsPage();
     }
 
-    public boolean isProfileButtonIsSelected() {
-        return findByBy(profileButton).isNotClickable();
+    public boolean visibilityOfNavigationBar() {
+        return findByBy(profileButton).isDisplayed();
     }
 }

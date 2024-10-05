@@ -2,6 +2,8 @@ package helpers.baseHelpers;
 
 import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.JavascriptExecutor;
@@ -50,6 +52,37 @@ public class HelpersMethod {
         } catch (InterruptedException e) {
             System.err.println("Interrupted exception caught during sleep: " + e.getMessage());
             Thread.currentThread().interrupt();
+        }
+    }
+
+    public static void resetApp() {
+        if (getAppiumDriver() instanceof AndroidDriver) {
+            ((AndroidDriver) getAppiumDriver()).resetApp();
+        } else if (getAppiumDriver() instanceof IOSDriver) {
+            ((IOSDriver) getAppiumDriver()).resetApp();
+        } else {
+            throw new IllegalStateException("Driver type is not supported for this method");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static void closeApp() {
+        if (getAppiumDriver() instanceof AndroidDriver) {
+            ((AndroidDriver) getAppiumDriver()).terminateApp(getAppiumDriver().getCapabilities().getCapability("appPackage").toString());
+        } else if (getAppiumDriver() instanceof IOSDriver) {
+            ((IOSDriver) getAppiumDriver()).terminateApp(getAppiumDriver().getCapabilities().getCapability("appPackage").toString());
+        } else {
+            throw new IllegalStateException("Driver type is not supported for this method");
+        }
+    }
+
+    public void openNotificationsCenter() {
+        if (getAppiumDriver() instanceof AndroidDriver) {
+            ((AndroidDriver) getAppiumDriver()).openNotifications();
+        } else if (getAppiumDriver() instanceof IOSDriver) {
+            throw new IllegalStateException("Driver type is not supported for this method");
+        } else {
+            throw new IllegalStateException("Driver type is not supported for this method");
         }
     }
 }

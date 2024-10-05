@@ -65,7 +65,17 @@ public class RestResource {
                 response();
     }
 
-    public static Response getWithParams(String url, Object params) {
+    public static Response get(String url) {
+
+        return given(getRequestSpec()).
+                relaxedHTTPSValidation().
+                when().get(url).
+                then().spec(getResponseSpec()).
+                extract().
+                response();
+    }
+
+    public static Response getWithParams(String url, Object params, String key) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -74,6 +84,7 @@ public class RestResource {
         Map<String, String> cardParams = objectMapper.convertValue(params, mapType);
 
         return given(getRequestSpec()).
+                header("X-API-KEY", getApiKey(key)).
                 params(cardParams).
                 relaxedHTTPSValidation().
                 when().get(url).
@@ -82,7 +93,7 @@ public class RestResource {
                 response();
     }
 
-    public static Response get(String url, String key) {
+    public static Response getWithApiKey(String url, String key) {
 
         return given(getRequestSpec()).
                 header("X-API-KEY", getApiKey(key)).
@@ -93,6 +104,7 @@ public class RestResource {
                 response();
     }
 
+    @SuppressWarnings("unused")
     public static Response getWithToken(String url) {
 
         return given(getRequestSpec()).

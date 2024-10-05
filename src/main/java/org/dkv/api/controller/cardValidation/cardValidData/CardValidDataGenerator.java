@@ -10,7 +10,10 @@ import static org.dkv.api.controller.cardValidation.NovofleetYmlReader.novoCardI
 import static org.dkv.api.controller.cardValidation.NovofleetYmlReader.novoCustomerId;
 import static org.dkv.api.controller.cardValidation.NovofleetYmlReader.novoExpiredDate;
 
+@SuppressWarnings("unused")
 public class CardValidDataGenerator {
+
+    @SuppressWarnings("unused")
     static Stream<Object[]> cardValidData() {
         return Stream.of(
                 new Object[]{dkvCardId(), dkvCustomerId(), formatExpirationDate(dkvExpiredDate())},
@@ -18,12 +21,19 @@ public class CardValidDataGenerator {
         );
     }
 
+    @SuppressWarnings("unused")
     static Stream<Object[]> cardInvalidData() {
         return Stream.of(
-                new Object[]{dkvCardId(), null, null},
-                new Object[]{novoCardId(), novoCustomerId(), null},
                 new Object[]{"123123123", novoCustomerId(), formatExpirationDate(novoExpiredDate())},
                 new Object[]{novoCardId(), novoCustomerId(), formatExpirationDate("0811")}
+        );
+    }
+
+    @SuppressWarnings("unused")
+    static Stream<Object[]> cardWithoutData() {
+        return Stream.of(
+                new Object[]{dkvCardId(), null, null},
+                new Object[]{novoCardId(), novoCustomerId(), null}
         );
     }
 }

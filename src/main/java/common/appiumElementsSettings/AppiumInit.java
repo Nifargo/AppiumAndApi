@@ -1,5 +1,6 @@
 package common.appiumElementsSettings;
 
+import common.systemLogger.AppLogger;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
@@ -10,6 +11,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,14 +27,23 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @UtilityClass
 public class AppiumInit {
+    private static final Logger logger = AppLogger.getLogger(AppiumInit.class);
 
     private final ConcurrentHashMap<Long, AppiumDriver> appiumDriverMap = new ConcurrentHashMap<>();
     protected Properties props;
 
     static {
-        if (Objects.equals(System.getProperty("isIOS"), "true")) {
+        String isSauceLab = System.getProperty("isSauceLab");
+        String isIOS = System.getProperty("isIOS");
+
+        if ("true".equals(isIOS)) {
+            logger.info("Using iOS configuration...");
             configureIOSDriver();
+        } else if ("true".equals(isSauceLab)) {
+            logger.info("Using Sauce Labs configuration...");
+            configureAndroidSauceLabDriver();
         } else {
+            logger.info("Using local Android configuration...");
             configureAndroidDriver();
         }
     }
@@ -57,50 +68,59 @@ public class AppiumInit {
         String appUrl = System.getProperty("user.dir") + File.separator + "src" + File.separator + "test"
                 + File.separator + "resources" + File.separator + "android" + File.separator + "androidReleaseBuild.apk";
         capabilities.setCapability(MobileCapabilityType.APP, appUrl);
-        capabilities.setCapability("automationName", props.getProperty("androidAutomationName"));
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 800);
         String ipAddress = new Properties().getProperty("ipAddress");
         AndroidDriver androidDriver = new AndroidDriver(new AppiumServiceBuilder().withIPAddress(ipAddress), capabilities);
         androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         appiumDriverMap.put(Thread.currentThread().getId(), androidDriver);
+    }
 
-//        Android SouceLabs configuration
-//        MutableCapabilities caps = new MutableCapabilities();
-//        caps.setCapability("platformName", "Android");
-//        caps.setCapability("appium:app", "storage:filename=androidReleaseBuild.apk");
-//        caps.setCapability("appium:deviceName", "Android GoogleAPI Emulator");
-//        caps.setCapability("appium:deviceOrientation", "portrait");
-//        caps.setCapability("appium:platformVersion", "12.0");
-//        caps.setCapability("appium:automationName", "UiAutomator2");
-//        MutableCapabilities sauceOptions = new MutableCapabilities();
-//        sauceOptions.setCapability("username", "Nifargo");
-//        sauceOptions.setCapability("accessKey", "712257a1-3a40-4834-bfb6-b16dc5952419");
-//        sauceOptions.setCapability("build", "appium-build-UNVTK");
-//        sauceOptions.setCapability("name", "<AndroidTestsOnSourceLab>");
-//        caps.setCapability("sauce:options", sauceOptions);
-//
-//        URL url = new URL("https://ondemand.eu-central-1.saucelabs.com:443/wd/hub");
-//        AndroidDriver androidDriverSauce = new AndroidDriver(url, caps);
-//
-//        androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    @SneakyThrows
+    private void configureAndroidSauceLabDriver(){
+        props = new Properties();
+        props.load(new FileInputStream(System.getProperty("user.dir") + "/src/main/java/data/properties/DataProperties"));
+
+        MutableCapabilities capabilities = new MutableCapabilities();
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, props.getProperty("platformNameAndroid"));
+        capabilities.setCapability("appium:app", "storage:filename=androidReleaseBuild.apk");
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, props.getProperty("AndroidDeviceNameSauce"));
+        capabilities.setCapability("appium:platformVersion", "12.0");
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
+        capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 800);
+        capabilities.setCapability(MobileCapabilityType.FULL_RESET, true);
+
+        MutableCapabilities sauceOptions = new MutableCapabilities();
+        sauceOptions.setCapability("appiumVersion", "2.11.0");
+        sauceOptions.setCapability("username", props.getProperty("sauceUsername"));
+        sauceOptions.setCapability("accessKey", props.getProperty("sauceAccessKey"));
+        sauceOptions.setCapability("build", props.getProperty("sauceBuildAndroid"));
+        sauceOptions.setCapability("name", props.getProperty("sauceTestNameAndroid"));
+        sauceOptions.setCapability("deviceOrientation", props.getProperty("deviceOrientation"));
+        capabilities.setCapability("sauce:options", sauceOptions);
+
+        URL url = new URL(props.getProperty("sauceUrl"));
+        AndroidDriver androidDriver = new AndroidDriver(url, capabilities);
+
+        androidDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        appiumDriverMap.put(Thread.currentThread().getId(), androidDriver);
     }
 
     @SneakyThrows
     private void configureIOSDriver() {
+        props = new Properties();
+        props.load(new FileInputStream(System.getProperty("user.dir") + "/src/main/java/data/properties/DataProperties"));
+
         MutableCapabilities caps = new MutableCapabilities();
         caps.setCapability("platformName", "iOS");
-        caps.setCapability("app", "storage:filename=<DKVRelease.ipa>");
-        caps.setCapability("deviceName", "iPhone XS Simulator");
-        caps.setCapability("deviceOrientation", "PORTRAIT");
-        caps.setCapability("platformVersion", "16.2");
-        caps.setCapability("automationName", "XCUITest");
+        caps.setCapability("appium:app", "storage:filename=DKV 1.ipa");  // The filename of the mobile app
+        caps.setCapability("appium:deviceName", "iPhone.*");
+        caps.setCapability("appium:automationName", "XCUITest");
+
         MutableCapabilities sauceOptions = new MutableCapabilities();
-        sauceOptions.setCapability("appiumVersion", "2.0.0");
         sauceOptions.setCapability("username", "Nifargo");
         sauceOptions.setCapability("accessKey", "695aec88-a6cf-4f42-a1b6-6de39e1e0279");
-        sauceOptions.setCapability("build", "appium-build-WYA96");
+        sauceOptions.setCapability("build", "appium-build-GQYPW");
         sauceOptions.setCapability("name", "<IOS regression tests>");
-        sauceOptions.setCapability("language", "en");
         caps.setCapability("sauce:options", sauceOptions);
 
         String sauceUrl = "https://Nifargo:695aec88-a6cf-4f42-a1b6-6de39e1e0279@ondemand.eu-central-1.saucelabs.com:443/wd/hub";
@@ -111,14 +131,40 @@ public class AppiumInit {
             iosDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
             appiumDriverMap.put(Thread.currentThread().getId(), iosDriver);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            logger.error("Malformed URL Exception{}", e.getMessage());
+        }
+    }
+
+    private static AppiumDriver getDriverFromMap() {
+        AppiumDriver driver = appiumDriverMap.get(Thread.currentThread().getId());
+        if (driver == null) {
+            throw new IllegalStateException("No driver found for the current thread");
+        }
+        return driver;
+    }
+
+    private static AppiumDriver checkDriverType(AppiumDriver driver) {
+        if (Objects.equals(System.getProperty("isIOS"), "true")) {
+            if (driver instanceof IOSDriver) {
+                return (IOSDriver) driver;
+            } else {
+                throw new IllegalStateException("Driver is not an instance of IOSDriver");
+            }
+        } else {
+            if (driver instanceof AndroidDriver) {
+                return (AndroidDriver) driver;
+            } else {
+                throw new IllegalStateException("Driver is not an instance of AndroidDriver");
+            }
         }
     }
 
     public static AppiumDriver getAppiumDriver() {
-        return appiumDriverMap.get(Thread.currentThread().getId());
+        AppiumDriver driver = getDriverFromMap();
+        return checkDriverType(driver);
     }
 
+    @SuppressWarnings("unused")
     public void stopAppiumDriver() {
         List<Long> driversToClose = new ArrayList<>();
         for (Map.Entry<Long, AppiumDriver> entry : appiumDriverMap.entrySet()) {
@@ -137,22 +183,37 @@ public class AppiumInit {
         }
     }
 
+    @SuppressWarnings("unused")
+    private static void setPropertiesForOldRealDevice(DesiredCapabilities capabilities){
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, props.getProperty("1af75d19"));
+    }
+
+    @SuppressWarnings("unused")
+    private static void setPropertiesForNewRealDevice(DesiredCapabilities capabilities){
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, props.getProperty("43191JEKB10367"));
+    }
+
+    @SuppressWarnings("unused")
     private static void addChromeDriverAndroidCapability(DesiredCapabilities capabilities) {
         capabilities.setCapability("chromedriverExecutable", "/Users/nifargo/Downloads/chromedriver-mac-arm64/chromedriver");
     }
 
+    @SuppressWarnings("unused")
     private static void includeSafariInWeviewsIosCapability(DesiredCapabilities capabilities) {
         capabilities.setCapability("includeSafariInWeviews", true);
     }
 
+    @SuppressWarnings("unused")
     private static void setWebviewConnectTimeoutIosCapability(DesiredCapabilities capabilities) {
         capabilities.setCapability("webviewConnectTimeout", "90000");
     }
 
+    @SuppressWarnings("unused")
     private static void setChromeDriverExecutableAndroidCapability(DesiredCapabilities capabilities) {
         capabilities.setCapability("chromedriverExecutable", "/Users/nifargo/Downloads/chromedriver-mac-arm64/chromedriver");
     }
 
+    @SuppressWarnings("unused")
     private static void setAppPackageAndActivityAndroidCapability(DesiredCapabilities capabilities) {
         capabilities.setCapability("appPackage", "com.dkveuroservice.mobileappkit");
         capabilities.setCapability("appActivity", "com.dkveuroservice.mobileappkit.MainActivity");

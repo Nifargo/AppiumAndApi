@@ -19,4 +19,14 @@ public class WaitUtils {
             WebDriverWait customWait = new WebDriverWait(getAppiumDriver(), Duration.ofSeconds(15));
             return customWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         }
+
+    public static By waitForBy(By locator) {
+        if (locator == null) {
+            throw new IllegalArgumentException("Locator must not be null");
+        }
+
+        WebDriverWait customWait = new WebDriverWait(getAppiumDriver(), Duration.ofSeconds(15));
+        customWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return locator;
+    }
 }

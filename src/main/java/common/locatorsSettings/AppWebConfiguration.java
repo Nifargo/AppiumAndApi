@@ -7,4 +7,11 @@ public class AppWebConfiguration {
     public static String getLocatorByType(WebTypeElements type, String id) {
         return "//" + type.getType() + "[" + DATA_TEST_ID + "'" + id + "']";
     }
+
+    public static final String ID = "@id=";
+
+    public static String getLocatorByTypeID(WebTypeElements type, String id) {
+        return "//" + type.getType() + "[" + ID + "'" + id + "']";
+    }
+
 }

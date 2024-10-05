@@ -1,22 +1,22 @@
 package org.dkvProject.ui.guestFlow.profilePageProject;
 
-import common.gameChanger.ContextHandler;
-import common.gameChanger.ContextType;
-import common.pageFinder.Finder;
+import common.listener.TestListener;
+import helpers.baseHelpers.SkipLoginFlowTest;
 import helpers.baseHelpers.SkipOnBoardingTest;
 import org.dkv.app.homeTab.HomePage;
 import org.dkv.app.navigationLine.NavigationBar;
+import org.dkv.app.profileTab.ProfilePage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static helpers.baseHelpers.HelpersMethod.navigateBackMultipleTimes;
-import static helpers.baseHelpers.HelpersMethod.pause;
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
-import static org.dkv.api.controller.credentials.CredentialsYmlReader.password;
-import static org.dkv.api.controller.credentials.CredentialsYmlReader.userName;
+import static helpers.baseHelpers.SkipLoginFlowTest.performLogin;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class AuthorisationFlowTest extends SkipOnBoardingTest {
 
@@ -27,20 +27,8 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
         String expectedLoggedInText = "You are logged in as";
         String expectedGuestUserTitle = "You are currently not logged in.";
 
-        var profilePage = new NavigationBar().clickProfileButton();
-        var loginPage = profilePage.clickLoginButton();
-
-        pause(6000);
-
-        ContextHandler handler = new ContextHandler();
-        handler.changeContext(ContextType.CHROME);
-        new Finder().WebPageFinder();
-
-        loginPage.typeLogin(userName());
-        loginPage.typePassword(password());
-        loginPage.clickLoginButton();
-
-        handler.changeContext(ContextType.NATIVE);
+        var profilePage = new ProfilePage();
+        new SkipLoginFlowTest().completeLoginFlowIfNeeded();
 
         Assertions.assertEquals(profilePage.getLoggedInUserText(), expectedLoggedInText);
 
@@ -58,6 +46,7 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
     @Test
     @DisplayName("DAF-T82 Check login flow from Service page")
     public void ServiceLoginFlowGuest() {
+
         String expectedGuestUserTitle = "You are currently not logged in.";
 
         var navigationBar = new NavigationBar();
@@ -65,17 +54,7 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
         var servicePage = navigationBar.clickServiceButton();
         var loginPage = servicePage.clickLoginButton();
 
-        pause(6000);
-
-        ContextHandler handler = new ContextHandler();
-        handler.changeContext(ContextType.CHROME);
-        new Finder().WebPageFinder();
-
-        loginPage.typeLogin(userName());
-        loginPage.typePassword(password());
-        loginPage.clickLoginButton();
-
-        handler.changeContext(ContextType.NATIVE);
+        performLogin(loginPage);
 
         navigationBar.clickProfileButton();
 
@@ -93,26 +72,23 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
     @Test
     @DisplayName("DAF-T80 Check login flow from My Transactions page")
     public void TransactionsLoginFlowGuest() {
+
         String expectedGuestUserTitle = "You are currently not logged in.";
 
         var navigationBar = new NavigationBar();
         var profilePage = navigationBar.clickProfileButton();
         var transactionsPage = profilePage.clickTransactionsButton();
 
+        Assertions.assertTrue(transactionsPage.visibilityTransactionsTitle());
+
         var loginPage = transactionsPage.clickLoginButton();
 
-        pause(6000);
+        performLogin(loginPage);
+        navigateBackMultipleTimes(1);
+        navigationBar.clickProfileButton();
+        profilePage.clickTransactionsButton();
 
-        ContextHandler handler = new ContextHandler();
-        handler.changeContext(ContextType.CHROME);
-        new Finder().WebPageFinder();
-
-        loginPage.typeLogin(userName());
-        loginPage.typePassword(password());
-        loginPage.clickLoginButton();
-
-        handler.changeContext(ContextType.NATIVE);
-
+        Assertions.assertFalse(transactionsPage.isEmptyTransactionsPage());
         navigateBackMultipleTimes(1);
         var servicePage = navigationBar.clickServiceButton();
 
@@ -128,24 +104,25 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
     @Test
     @DisplayName("DAF-T79 Check Login flow from My DKV cards page")
     public void MyDkvCardsLoginFlow() {
+
         String expectedGuestUserTitle = "You are currently not logged in.";
 
         var navigationBar = new NavigationBar();
         var profilePage = navigationBar.clickProfileButton();
         var myDkvCardsPage = profilePage.clickMyDkvCardsButton();
+
+        Assertions.assertTrue(myDkvCardsPage.visibilityCardsTitleGuest());
+
         var loginPage = myDkvCardsPage.clickCardsLoginButton();
 
-        pause(6000);
+        performLogin(loginPage);
+        navigateBackMultipleTimes(1);
 
-        ContextHandler handler = new ContextHandler();
-        handler.changeContext(ContextType.CHROME);
-        new Finder().WebPageFinder();
+        navigationBar.clickProfileButton();
+        profilePage.clickMyDkvCardsButton();
 
-        loginPage.typeLogin(userName());
-        loginPage.typePassword(password());
-        loginPage.clickLoginButton();
+        Assertions.assertFalse(myDkvCardsPage.visibilityLoginButton());
 
-        handler.changeContext(ContextType.NATIVE);
         navigateBackMultipleTimes(1);
         var servicePage = navigationBar.clickServiceButton();
 
@@ -161,6 +138,7 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
     @Test
     @DisplayName("DAF-T81 Check login flow from My Dkv Cards page on Home page")
     public void HomeMyDkvCardsLoginFlow() {
+
         String expectedGuestUserTitle = "You are currently not logged in.";
 
         var homePage = new HomePage();
@@ -170,17 +148,8 @@ public class AuthorisationFlowTest extends SkipOnBoardingTest {
 
         var loginPage = dkvCardsPage.clickCardsLoginButton();
 
-        pause(6000);
+        performLogin(loginPage);
 
-        ContextHandler handler = new ContextHandler();
-        handler.changeContext(ContextType.CHROME);
-        new Finder().WebPageFinder();
-
-        loginPage.typeLogin(userName());
-        loginPage.typePassword(password());
-        loginPage.clickLoginButton();
-
-        handler.changeContext(ContextType.NATIVE);
         navigateBackMultipleTimes(1);
         var servicePage = navigationBar.clickServiceButton();
 

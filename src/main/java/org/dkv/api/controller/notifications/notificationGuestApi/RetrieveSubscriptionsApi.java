@@ -10,6 +10,6 @@ import static org.dkv.api.common.baseUrlManager.baseUrlYmlReader.topicsSubscript
 
 public class RetrieveSubscriptionsApi {
     public static Response getNotificationSubscriptionList(String token) {
-        return RestResource.get(baseUrl() + baseUrlNotificationFlow() + appTokenId() + "/" + token + topicsSubscription(), "X_API_KEY_notification_dev_preprod");
+        return RestResource.getWithApiKey(baseUrl() + baseUrlNotificationFlow() + appTokenId() + "/" + token + topicsSubscription(), "X_API_KEY_notification_dev_preprod");
     }
 }

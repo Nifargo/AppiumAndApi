@@ -1,17 +1,23 @@
 package helpers.baseHelpers;
 
 import common.appiumElementsSettings.AppiumInit;
+import common.systemLogger.AppLogger;
 import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 import org.dkv.app.firstOpenJourney.OnboardingPage;
+import org.dkv.app.navigationLine.NavigationBar;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.slf4j.Logger;
 
 import java.util.Objects;
 
 import static helpers.baseHelpers.HelpersMethod.pause;
 
 public class SkipOnBoardingTest {
+
+    private static final Logger LOGGER = AppLogger.getLogger(SkipOnBoardingTest.class);
 
     public static void ensureAppIsActive() {
         AndroidDriver driver = (AndroidDriver) AppiumInit.getAppiumDriver();
@@ -34,10 +40,14 @@ public class SkipOnBoardingTest {
                 var analysisPopUp = locationPopUp.clickAllowAllTimeButton();
                 var rateMePopUp = analysisPopUp.clickActivateButton();
                 rateMePopUp.clickThanksCloseButton();
+            } else {
+                new NavigationBar().clickProfileButton();
             }
         } catch (NoSuchElementException e) {
-            e.printStackTrace();
-        }
+            LOGGER.error("Onboarding is not displayed: {}", e.getMessage());
+        } catch (TimeoutException e) {
+        LOGGER.error("Timeout while waiting for onboarding elements: {}", e.getMessage());
+    }
     }
 
     @BeforeEach

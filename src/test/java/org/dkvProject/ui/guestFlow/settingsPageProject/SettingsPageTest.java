@@ -1,5 +1,6 @@
 package org.dkvProject.ui.guestFlow.settingsPageProject;
 
+import common.listener.TestListener;
 import helpers.baseHelpers.SkipOnBoardingTest;
 import org.dkv.app.firstOpenJourney.OnboardingPage;
 import org.dkv.app.navigationLine.NavigationBar;
@@ -7,11 +8,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static helpers.baseHelpers.HelpersMethod.navigateBackMultipleTimes;
 import static helpers.baseHelpers.HelpersMethod.pause;
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class SettingsPageTest extends SkipOnBoardingTest {
 
@@ -33,12 +36,12 @@ public class SettingsPageTest extends SkipOnBoardingTest {
 
     @Test
     @DisplayName("Check on the settings page - FAQ page is displayed")
-    public void SettingsFaqTest() throws Exception {
+    public void SettingsFaqTest() {
 
         var navigationBar = new NavigationBar();
         navigationBar.clickProfileButton();
         var settingsPage = navigationBar.clickSettingsButton();
-        Thread.sleep(100);
+        pause(100);
         scrollDown(0.9, 0.1, 0.5, 2000);
 
         Assertions.assertTrue(settingsPage.existsFaqButton());
@@ -49,11 +52,12 @@ public class SettingsPageTest extends SkipOnBoardingTest {
 
     @Test
     @DisplayName("Check if Data Protection Page is displayed")
-    public void SettingsDataProtectionTest() throws Exception {
+    public void SettingsDataProtectionTest() {
 
         var navigationBar = new NavigationBar();
+        navigationBar.clickProfileButton();
         var settingsPage = navigationBar.clickSettingsButton();
-        Thread.sleep(100);
+        pause(100);
         scrollDown(0.9, 0.1, 0.5, 2000);
 
         var additionalHeader = settingsPage.clickDataProtectMenuButton();
@@ -70,7 +74,7 @@ public class SettingsPageTest extends SkipOnBoardingTest {
         var navigationBar = new NavigationBar();
         navigationBar.clickProfileButton();
         var settingsPage = navigationBar.clickSettingsButton();
-        Thread.sleep(100);
+        pause(100);
         scrollDown(0.8, 0.1, 0.5, 2000);
 
         settingsPage.clickOnboardingButton();
@@ -122,9 +126,7 @@ public class SettingsPageTest extends SkipOnBoardingTest {
         var settingsPage = navigationBar.clickSettingsButton();
 
         Assertions.assertTrue(settingsPage.existsTrackingDescription());
-
-        settingsPage.clickAllowTracking();
-        Assertions.assertFalse(settingsPage.allowTrackingIsChecked());
+        Assertions.assertTrue(settingsPage.allowTrackingIsChecked());
     }
 
     @Test
@@ -134,7 +136,8 @@ public class SettingsPageTest extends SkipOnBoardingTest {
         var navigationBar = new NavigationBar();
         var settingsPage = navigationBar.clickSettingsButton();
         Assertions.assertTrue(settingsPage.existsNotificationSettings());
-        var notificationSettings = settingsPage.clickNotificationSettingsButton();
+        var notificationSettings = settingsPage.clickNotificationSettingsButton(2);
         Assertions.assertTrue(notificationSettings.notificationSettingsTitleIsDisplayed());
+        navigateBackMultipleTimes(1);
     }
 }

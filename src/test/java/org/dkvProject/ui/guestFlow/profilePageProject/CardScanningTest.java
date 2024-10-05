@@ -2,6 +2,7 @@ package org.dkvProject.ui.guestFlow.profilePageProject;
 
 import common.gameChanger.ContextHandler;
 import common.gameChanger.ContextType;
+import common.listener.TestListener;
 import common.pageFinder.Finder;
 import helpers.baseHelpers.SkipOnBoardingTest;
 import org.dkv.app.navigationLine.NavigationBar;
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static helpers.baseHelpers.HelpersMethod.scrollDown;
 import static org.dkv.api.controller.cardValidation.DkvYmlReader.dkvCardId;
 import static org.dkv.api.controller.cardValidation.DkvYmlReader.dkvCustomerId;
 import static org.dkv.api.controller.cardValidation.DkvYmlReader.dkvExpiredDate;
 
+@ExtendWith(TestListener.class)
 @Tag("ui")
 public class CardScanningTest extends SkipOnBoardingTest {
 

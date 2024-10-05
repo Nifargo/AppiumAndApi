@@ -1,6 +1,8 @@
 package org.dkv.app.profileTab.authorisations;
 
 import org.dkv.app.profileTab.ProfilePage;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 
 import static common.appiumElementsSettings.AppiumActions.find;
 
@@ -8,6 +10,14 @@ public class LoginPage {
     String loginField = "//input[@id='username']";
     String passwordField = "//input[@id='password']";
     String SignInButton = "//*[@id='kc-login']";
+
+    public boolean existLoginButton() {
+        try {
+            return find(loginField).isDisplayed();
+        } catch (NoSuchElementException | TimeoutException e) {
+            return false;
+        }
+    }
 
     public void typeLogin(String text) {
         find(loginField).click();

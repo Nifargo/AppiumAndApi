@@ -27,7 +27,7 @@ public class BaseTest {
         String port = prop.getProperty("port");
 
         server = new AppiumServiceBuilder()
-                .withAppiumJS(new File("//usr//local//lib//node_modules//appium//build//lib//main.js"))
+                .withAppiumJS(new File("/Users/nifargo/.nvm/versions/node/v22.7.0/lib/node_modules/appium/build/lib/main.js"))
                 .withIPAddress(ipAddress)
                 .usingPort(Integer.parseInt(port))
                 .withLogFile(new File("appium.log"))

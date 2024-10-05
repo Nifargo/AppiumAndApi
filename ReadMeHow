@@ -1,0 +1,8 @@
+How to run test suite
+1. Home Page -./gradlew test --tests helpers.TestSuites.HomePageTestSuite
+2. Onboarding Flow  - ./gradlew test --tests helpers.TestSuites.OnboardingTestSuite
+3. Login Flow - ./gradlew test --tests helpers.TestSuites.LoginFlowSuite
+4. Profile Flow - ./gradlew test --tests helpers.TestSuites.ProfilePageSuite
+5. Feedback flow - ./gradlew test --tests helpers.TestSuites.FeedbackFlowSuite
+6. Service page - ./gradlew test --tests helpers.TestSuites.ServicePageSuite
+7. Settings page - ./gradlew test --tests helpers.TestSuites.SettingsPageSuite

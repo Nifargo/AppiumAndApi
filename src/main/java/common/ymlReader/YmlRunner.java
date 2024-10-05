@@ -1,5 +1,7 @@
 package common.ymlReader;
 
+import common.systemLogger.AppLogger;
+import org.slf4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -9,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static common.systemLogger.AppLogger.logger;
-
 public class YmlRunner {
+
+    private static final Logger logger = AppLogger.getLogger(YmlRunner.class);
 
     public static String readYAMLFile(String file, String key) {
         try (InputStream input = new FileInputStream("src/test/resources/data/ymlData/" + file + ".yml")) {
@@ -46,7 +48,7 @@ public class YmlRunner {
     }
 
     private static void handleYamlException(String file, Exception e) {
-        logger.error("Error reading YAML file: " + file, e);
+        logger.error("Error reading YAML file: {}" + file, e.getMessage());
         throw new RuntimeException("Error reading YAML file: " + file, e);
     }
 
@@ -80,7 +82,7 @@ public class YmlRunner {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
         }
 
         return instance;

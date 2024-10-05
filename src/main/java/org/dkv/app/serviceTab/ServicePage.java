@@ -4,6 +4,7 @@ import common.appiumElementsSettings.AppiumSelector;
 import io.appium.java_client.AppiumBy;
 import org.dkv.app.profileTab.authorisations.LoginPage;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 
 import static common.appiumElementsSettings.AppiumActions.findByBy;
 import static org.openqa.selenium.By.xpath;
@@ -15,7 +16,7 @@ public class ServicePage {
     public boolean loginButtonVisible() {
         try {
             return findByBy(loginButton).isDisplayed();
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | TimeoutException e) {
             return false;
         }
     }
